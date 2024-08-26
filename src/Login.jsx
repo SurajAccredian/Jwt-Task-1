@@ -27,7 +27,7 @@ function Login() {
     }
     document.cookie = `${name}=${
       value || ""
-    }${expires}; path=/; domain=localhost; SameSite=None; Secure`;
+    }${expires}; path=/; domain=vercel.app; SameSite=None; Secure`;
   }
 
   const handleChange = (e) => {
