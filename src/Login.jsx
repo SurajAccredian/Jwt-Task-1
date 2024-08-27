@@ -30,6 +30,10 @@ function Login() {
     }${expires}; path=/; domain=localhost; SameSite=None; Secure`;
   }
 
+  function deleteCookie(name) {
+    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=localhost; SameSite=None; Secure`;
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({
@@ -67,11 +71,6 @@ function Login() {
             localStorage.setItem("token", result.data.token);
             setIsAuth(true);
             setToken(result.data.token);
-            console.log(token);
-            // const secondAppUrl = `http://localhost:5173?token=${encodeURIComponent(
-            //   result.data.token
-            // )}`;
-            // window.location.href = secondAppUrl;
           }
         } else if (result.data.status === 401) {
           console.error(
@@ -88,6 +87,15 @@ function Login() {
       .catch((error) => {
         console.error("An error occurred during login:", error);
       });
+  };
+
+  const logout = () => {
+    deleteCookie("token");
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    setIsAuth(false);
+    setUserName("");
+    setToken("");
   };
 
   useEffect(() => {
@@ -113,13 +121,11 @@ function Login() {
     };
 
     window.addEventListener("storage", handleStorageChange);
-
     // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
-
 
   return (
     <div>
@@ -129,6 +135,8 @@ function Login() {
           <a href={`http://localhost:5173/token?token=${token}`}>
             View our new application
           </a>
+           <br />
+          <button onClick={logout}>Logout</button>
         </>
       ) : (
         <form onSubmit={submitForm}>
@@ -148,6 +156,7 @@ function Login() {
             onChange={handleChange}
             required
           />
+          
           <button type="submit">Login</button>
         </form>
       )}
