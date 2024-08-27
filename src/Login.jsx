@@ -132,7 +132,7 @@ function Login() {
       {isAuth ? (
         <>
           <p>Welcome, {userName}!</p>
-          <a href={`https://jwt-task-2-na2980kyr-surajaccredians-projects.vercel.app/token?token=${token}`}>
+          <a href={`https://jwt-task-2.vercel.app/token?token=${token}`}>
             View our new application
           </a>
            <br />
