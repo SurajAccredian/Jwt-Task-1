@@ -27,7 +27,7 @@ function Login() {
     }
     document.cookie = `${name}=${
       value || ""
-    }${expires}; path=/; domain=localhost; SameSite=None; Secure`;
+    }${expires}; path=/; domain=vercel.app; SameSite=None; Secure`;
   }
 
   function deleteCookie(name) {
@@ -132,7 +132,7 @@ function Login() {
       {isAuth ? (
         <>
           <p>Welcome, {userName}!</p>
-          <a href={`http://localhost:5173/token?token=${token}`}>
+          <a href={`https://jwt-task-2-na2980kyr-surajaccredians-projects.vercel.app/token?token=${token}`}>
             View our new application
           </a>
            <br />
