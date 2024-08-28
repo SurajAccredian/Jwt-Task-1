@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { isExpired, decodeToken } from "react-jwt";
 import CryptoJS from "crypto-js";
+import useAuth from "./hooks/useAuth";
 
 function Login() {
+  let { isAuthenticated, checkAuthStatus } = useAuth();
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
-  const [isAuth, setIsAuth] = useState(false);
   const [userName, setUserName] = useState("");
   const [token, setToken] = useState("");
 
@@ -25,13 +26,15 @@ function Login() {
       date.setTime(date.getTime() + hours * 60 * 60 * 1000);
       expires = `; expires=${date.toUTCString()}`;
     }
-    document.cookie = `${name}=${
-      value || ""
-    }${expires}; path=/; domain=vercel.app; SameSite=None; Secure`;
+    document.cookie = `${name}=${encodeURIComponent(
+      JSON.stringify(value)
+    )}${expires}; path=/; domain=vercel.app; SameSite=None; Secure`;
   }
 
+  // domain=vercel.app
+
   function deleteCookie(name) {
-    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=localhost; SameSite=None; Secure`;
+    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=vercel.app; SameSite=None; Secure`;
   }
 
   const handleChange = (e) => {
@@ -52,6 +55,8 @@ function Login() {
       ).toString(),
     };
 
+    console.log(sendData);
+
     axios
       .post(
         `https://accredian-backend-v1-image-7dra35jwyq-uc.a.run.app/login/prelogin`,
@@ -63,14 +68,24 @@ function Login() {
       )
       .then((result) => {
         if (result.data.status === 200) {
-          setCookie("token", result.data.token, 12);
+          console.log("The result is " + result.token);
+          console.log("The result is " + result.name);
+
           const myDecodedToken = decodeToken(result.data.token);
           if (myDecodedToken) {
             setUserName(myDecodedToken.data.firstname);
             localStorage.setItem("name", myDecodedToken.data.firstname);
             localStorage.setItem("token", result.data.token);
-            setIsAuth(true);
+            const userData = {
+              name: myDecodedToken.data.firstname,
+              token: result.data.token,
+            };
+
+            console.log(userData);
+            setCookie("userData", userData, 12);
             setToken(result.data.token);
+            console.log("calling now")
+            checkAuthStatus();
           }
         } else if (result.data.status === 401) {
           console.error(
@@ -90,33 +105,34 @@ function Login() {
   };
 
   const logout = () => {
-    deleteCookie("token");
+    deleteCookie("userData");
     localStorage.removeItem("token");
     localStorage.removeItem("name");
-    setIsAuth(false);
+    checkAuthStatus();
     setUserName("");
     setToken("");
   };
 
   useEffect(() => {
-    const checkAuthStatus = () => {
+    checkAuthStatus();
+    const checkAuth = () => {
       const token = localStorage.getItem("token");
       const name = localStorage.getItem("name");
       if (token && !isExpired(token)) {
         setToken(token);
-        setIsAuth(true);
         setUserName(name || "");
+        checkAuthStatus()
       } else {
-        setIsAuth(false);
+        checkAuthStatus();
       }
     };
 
-    checkAuthStatus(); // Initial check on mount
+    checkAuth();
 
     // Event listener to update auth status when localStorage changes
     const handleStorageChange = (e) => {
       if (e.storageArea === localStorage) {
-        checkAuthStatus();
+        checkAuth();
       }
     };
 
@@ -129,13 +145,13 @@ function Login() {
 
   return (
     <div>
-      {isAuth ? (
+      {isAuthenticated ? (
         <>
           <p>Welcome, {userName}!</p>
           <a href={`https://jwt-task-2.vercel.app/token?token=${token}`}>
             View our new application
           </a>
-           <br />
+          <br />
           <button onClick={logout}>Logout</button>
         </>
       ) : (
@@ -156,7 +172,7 @@ function Login() {
             onChange={handleChange}
             required
           />
-          
+
           <button type="submit">Login</button>
         </form>
       )}
