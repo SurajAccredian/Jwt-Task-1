@@ -31,7 +31,7 @@ function Login() {
   }
 
   function deleteCookie(name) {
-    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=localhost; SameSite=None; Secure`;
+    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=vercel.app; SameSite=None; Secure`;
   }
 
   const handleChange = (e) => {
