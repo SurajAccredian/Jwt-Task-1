@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { isExpired } from "react-jwt";
+import Cookies from 'js-cookie';
+
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -15,7 +17,7 @@ const useAuth = () => {
   }
 
   const checkAuthStatus = () => {
-    const userData = getCookie('userData');
+    const userData = Cookies.get('userData');
     console.log("Called");
     console.log("Cookie:", userData); // Debug: log the cookie value
     if (userData) {

@@ -3,6 +3,7 @@ import axios from "axios";
 import { isExpired, decodeToken } from "react-jwt";
 import CryptoJS from "crypto-js";
 import useAuth from "./hooks/useAuth";
+import Cookies from "js-cookie";
 
 function Login() {
   let { isAuthenticated, checkAuthStatus } = useAuth();
@@ -20,21 +21,32 @@ function Login() {
   };
 
   function setCookie(name, value, hours) {
-    let expires = "";
-    if (hours) {
-      const date = new Date();
-      date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-      expires = `; expires=${date.toUTCString()}`;
+    Cookies.set("userData", JSON.stringify({ email, token: "dummy-token" }), {
+      expires: 1,
+      sameSite: "None",
+      secure: true,
+    });
+    try {
+      let expires = "";
+      if (hours) {
+        const date = new Date();
+        date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+        expires = `; expires=${date.toUTCString()}`;
+      }
+      document.cookie = `${name}=${encodeURIComponent(
+        JSON.stringify(value)
+      )}${expires}; path=/; domain=localhost; SameSite=None; Secure`;
+
+      console.log("The cookie created is " + document.cookie);
+    } catch (e) {
+      console.log("Error creating cokiee " + e);
     }
-    document.cookie = `${name}=${encodeURIComponent(
-      JSON.stringify(value)
-    )}${expires}; path=/; domain=vercel.app; SameSite=None; Secure`;
   }
 
   // domain=vercel.app
 
   function deleteCookie(name) {
-    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=vercel.app; SameSite=None; Secure`;
+    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=localhost; SameSite=None; Secure`;
   }
 
   const handleChange = (e) => {
@@ -68,9 +80,6 @@ function Login() {
       )
       .then((result) => {
         if (result.data.status === 200) {
-          console.log("The result is " + result.token);
-          console.log("The result is " + result.name);
-
           const myDecodedToken = decodeToken(result.data.token);
           if (myDecodedToken) {
             setUserName(myDecodedToken.data.firstname);
@@ -82,9 +91,14 @@ function Login() {
             };
 
             console.log(userData);
-            setCookie("userData", userData, 12);
+            // setCookie("userData", userData, 12);
+            Cookies.set("userData", JSON.stringify(userData), {
+              expires: 1,
+              sameSite: "None",
+              secure: true,
+            });
             setToken(result.data.token);
-            console.log("calling now")
+            console.log("calling now");
             checkAuthStatus();
           }
         } else if (result.data.status === 401) {
@@ -105,7 +119,8 @@ function Login() {
   };
 
   const logout = () => {
-    deleteCookie("userData");
+    // deleteCookie("userData");
+    Cookies.remove("userData");
     localStorage.removeItem("token");
     localStorage.removeItem("name");
     checkAuthStatus();
@@ -121,7 +136,7 @@ function Login() {
       if (token && !isExpired(token)) {
         setToken(token);
         setUserName(name || "");
-        checkAuthStatus()
+        checkAuthStatus();
       } else {
         checkAuthStatus();
       }
@@ -148,7 +163,7 @@ function Login() {
       {isAuthenticated ? (
         <>
           <p>Welcome, {userName}!</p>
-          <a href={`https://jwt-task-2.vercel.app/token?token=${token}`}>
+          <a href={`http://localhost:5173/token?token=${token}`}>
             View our new application
           </a>
           <br />
