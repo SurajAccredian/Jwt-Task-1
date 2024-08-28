@@ -20,34 +20,34 @@ function Login() {
     },
   };
 
-  function setCookie(name, value, hours) {
-    Cookies.set("userData", JSON.stringify({ email, token: "dummy-token" }), {
-      expires: 1,
-      sameSite: "None",
-      secure: true,
-    });
-    try {
-      let expires = "";
-      if (hours) {
-        const date = new Date();
-        date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-        expires = `; expires=${date.toUTCString()}`;
-      }
-      document.cookie = `${name}=${encodeURIComponent(
-        JSON.stringify(value)
-      )}${expires}; path=/; domain=localhost; SameSite=None; Secure`;
+  // function setCookie(name, value, hours) {
+  //   Cookies.set("userData", JSON.stringify({ email, token: "dummy-token" }), {
+  //     expires: 1,
+  //     sameSite: "None",
+  //     secure: true,
+  //   });
+  //   try {
+  //     let expires = "";
+  //     if (hours) {
+  //       const date = new Date();
+  //       date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+  //       expires = `; expires=${date.toUTCString()}`;
+  //     }
+  //     document.cookie = `${name}=${encodeURIComponent(
+  //       JSON.stringify(value)
+  //     )}${expires}; path=/; domain=localhost; SameSite=None; Secure`;
 
-      console.log("The cookie created is " + document.cookie);
-    } catch (e) {
-      console.log("Error creating cokiee " + e);
-    }
-  }
+  //     console.log("The cookie created is " + document.cookie);
+  //   } catch (e) {
+  //     console.log("Error creating cokiee " + e);
+  //   }
+  // }
 
   // domain=vercel.app
 
-  function deleteCookie(name) {
-    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=localhost; SameSite=None; Secure`;
-  }
+  // function deleteCookie(name) {
+  //   document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=localhost; SameSite=None; Secure`;
+  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,7 +95,6 @@ function Login() {
             Cookies.set("userData", JSON.stringify(userData), {
               expires: 1,
               sameSite: "None",
-              secure: true,
             });
             setToken(result.data.token);
             console.log("calling now");
