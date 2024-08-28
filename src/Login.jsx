@@ -49,6 +49,17 @@ function Login() {
   //   document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=localhost; SameSite=None; Secure`;
   // }
 
+  function setCookie(name, value, hours, domain) {
+    let expires = "";
+    if (hours) {
+      const date = new Date();
+      date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+      expires = `; expires=${date.toUTCString()}`;
+    }
+    const cookieDomain = domain ? `; domain=${domain}` : "";
+    document.cookie = `${name}=${value || ""}${expires}${cookieDomain}; path=/`;
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({
@@ -92,11 +103,13 @@ function Login() {
 
             console.log(userData);
             // setCookie("userData", userData, 12);
-            Cookies.set("userData", JSON.stringify(userData), {
-              expires: 1,
-              sameSite: "None",
-              secure: true,
-            });
+            // Cookies.set("userData", JSON.stringify(userData), {
+            //   expires: 1,
+            //   sameSite: "None",
+            //   secure: true,
+            // });
+
+            setCookie("token", result.data.token, 2, "localhost");
             setToken(result.data.token);
             console.log("calling now");
             checkAuthStatus();
