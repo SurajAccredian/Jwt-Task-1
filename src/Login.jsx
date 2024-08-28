@@ -19,18 +19,23 @@ function Login() {
     },
   };
 
-  function setCookie(name, value, hours) {
-    let expires = "";
-    if (hours) {
-      const date = new Date();
-      date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-      expires = `; expires=${date.toUTCString()}`;
-    }
-    document.cookie = `${name}=${encodeURIComponent(
-      JSON.stringify(value)
-    )}${expires}; path=/; domain=.vercel.app; SameSite=None; Secure`;
-  }
+    function setCookie(name, value, hours) {
+    try {
+      let expires = "";
+      if (hours) {
+        const date = new Date();
+        date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+        expires = `; expires=${date.toUTCString()}`;
+      }
+      document.cookie = `${name}=${encodeURIComponent(
+        JSON.stringify(value)
+      )}${expires}; path=/; domain=localhost; SameSite=None; Secure`;
 
+      console.log("The cookie created is " + document.cookie);
+    } catch (e) {
+      console.log("Error creating cokiee " + e);
+    }
+  }
   // domain=vercel.app
 
   function deleteCookie(name) {
