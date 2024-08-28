@@ -95,6 +95,7 @@ function Login() {
             Cookies.set("userData", JSON.stringify(userData), {
               expires: 1,
               sameSite: "None",
+              secure: true,
             });
             setToken(result.data.token);
             console.log("calling now");
