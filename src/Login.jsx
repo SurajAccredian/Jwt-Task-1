@@ -163,7 +163,7 @@ function Login() {
       {isAuthenticated ? (
         <>
           <p>Welcome, {userName}!</p>
-          <a href={`http://localhost:5173/token?token=${token}`}>
+          <a href={`https://jwt-task-2.vercel.app/token?token=${token}`}>
             View our new application
           </a>
           <br />
