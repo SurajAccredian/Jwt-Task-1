@@ -10,7 +10,7 @@ const useAuth = () => {
   function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts >= 1) {
+    if (parts) {
       return decodeURIComponent(parts.pop().split(";").shift());
     }
     return null;
@@ -23,7 +23,8 @@ const useAuth = () => {
     if (token) {
       try {
         const parsedtoken = JSON.parse(token);
-        if (parsedtoken.token && !isExpired(parsedtoken)) {
+
+        if (parsedtoken && !isExpired(parsedtoken)) {
           console.log("Authentication status: authenticated");
           setIsAuthenticated(true);
         } else {
