@@ -28,13 +28,13 @@ function Login() {
     }
     document.cookie = `${name}=${encodeURIComponent(
       JSON.stringify(value)
-    )}${expires}; path=/; domain=vercel.app; SameSite=None; Secure`;
+    )}${expires}; path=/; domain=.vercel.app; SameSite=None; Secure`;
   }
 
   // domain=vercel.app
 
   function deleteCookie(name) {
-    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=vercel.app; SameSite=None; Secure`;
+    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=.vercel.app; SameSite=None; Secure`;
   }
 
   const handleChange = (e) => {
