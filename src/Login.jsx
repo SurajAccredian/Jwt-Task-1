@@ -86,6 +86,8 @@ function Login() {
       )
       .then((result) => {
         if (result.data.status === 200) {
+          setCookie("token", result.data.token, 2);
+          console.log("Cookie was set"):
           const myDecodedToken = decodeToken(result.data.token);
           if (myDecodedToken) {
             setUserName(myDecodedToken.data.firstname);
@@ -103,10 +105,8 @@ function Login() {
             //   sameSite: "None",
             //   secure: true,
             // });
-
-            setCookie("token", result.data.token, 2);
             setToken(result.data.token);
-            console.log("calling now");
+            console.log("calling now"+result.result.data.token);
             checkAuthStatus();
           }
         } else if (result.data.status === 401) {
