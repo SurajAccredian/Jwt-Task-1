@@ -31,7 +31,7 @@ function Login() {
       }
       document.cookie = `${name}=${encodeURIComponent(
         JSON.stringify(value)
-      )}${expires}; path=/; domain=.vercel.app; SameSite=None; Secure`;
+      )}${expires}; path=/; domain=jwt-task-1.vercel.app; SameSite=None; Secure`;
 
       console.log("The cookie created is " + document.cookie);
     } catch (e) {
@@ -42,7 +42,7 @@ function Login() {
   // domain=vercel.app
 
   function deleteCookie(name) {
-    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=.vercel.app; SameSite=None; Secure`;
+    document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=jwt-task-1.vercel.app; SameSite=None; Secure`;
   }
 
   const handleChange = (e) => {
