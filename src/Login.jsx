@@ -87,7 +87,7 @@ function Login() {
       .then((result) => {
         if (result.data.status === 200) {
           setCookie("token", result.data.token, 2);
-          console.log("Cookie was set"):
+          console.log("Cookie was set");
           const myDecodedToken = decodeToken(result.data.token);
           if (myDecodedToken) {
             setUserName(myDecodedToken.data.firstname);
