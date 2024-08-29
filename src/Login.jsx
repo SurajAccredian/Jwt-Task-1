@@ -21,7 +21,8 @@ function Login() {
   };
 
   function setCookie(name, value, hours) {
-      try {
+    try {
+      console.log("The cookie name is " + name);
       let expires = "";
       if (hours) {
         const date = new Date();
@@ -43,17 +44,6 @@ function Login() {
   function deleteCookie(name) {
     document.cookie = `${name}=; Max-Age=-99999999; path=/; domain=.vercel.app; SameSite=None; Secure`;
   }
-
-  // function setCookie(name, value, hours, domain) {
-  //   let expires = "";
-  //   if (hours) {
-  //     const date = new Date();
-  //     date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-  //     expires = `; expires=${date.toUTCString()}`;
-  //   }
-  //   const cookieDomain = domain ? `; domain=${domain}` : "";
-  //   document.cookie = `${name}=${value || ""}${expires}${cookieDomain}; path=/`;
-  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -106,7 +96,7 @@ function Login() {
             //   secure: true,
             // });
             setToken(result.data.token);
-            console.log("calling now"+result.result.data.token);
+            console.log("calling now" + result.result.data.token);
             checkAuthStatus();
           }
         } else if (result.data.status === 401) {
